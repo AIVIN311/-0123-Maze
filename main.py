@@ -70,7 +70,7 @@ def create_run_folder(prefix="train"):
     return run_dir
 
 def plot_path(path, save_dir):
-    maze_size = (8, 8)
+    maze_size = (10, 10)
     maze = np.zeros(maze_size)
 
     for x, y in path:

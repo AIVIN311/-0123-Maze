@@ -7,17 +7,19 @@ class MazeEnv(gym.Env):
         super().__init__()
 
         self.action_space = spaces.Discrete(4)  # 上下左右四個動作
-        self.observation_space = spaces.Box(low=0, high=7, shape=(2,), dtype=np.float32)  # 因為是8x8，所以最高index是7
+        self.observation_space = spaces.Box(low=0, high=9, shape=(2,), dtype=np.float32)  # 10x10 → max index = 9
 
         self.maze = np.array([
-            [2, 0, 1, 0, 0, 0, 0, 0],
-            [1, 0, 1, 0, 1, 1, 1, 0],
-            [1, 0, 1, 0, 0, 0, 1, 0],
-            [1, 0, 0, 0, 1, 0, 1, 0],
-            [1, 1, 1, 1, 1, 0, 1, 0],
-            [0, 0, 0, 0, 0, 0, 1, 0],
-            [1, 1, 1, 1, 1, 0, 1, 0],
-            [0, 0, 0, 0, 0, 0, 0, 3]
+            [2, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 1, 0, 1, 1, 1, 0, 1, 0],
+            [1, 0, 1, 0, 0, 0, 1, 0, 1, 0],
+            [1, 0, 0, 0, 1, 0, 1, 0, 1, 0],
+            [1, 1, 1, 1, 1, 0, 1, 0, 1, 0],
+            [0, 0, 0, 0, 0, 0, 1, 0, 1, 0],
+            [1, 1, 1, 1, 1, 0, 1, 0, 1, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+            [1, 1, 1, 1, 1, 1, 1, 0, 1, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 3]
         ])
         # 0: 空地, 1: 障礙物, 2: 起點, 3: 終點
 
@@ -32,7 +34,6 @@ class MazeEnv(gym.Env):
 
     def step(self, action):
         next_state = self.state.copy()
-
         max_row, max_col = self.maze.shape[0] - 1, self.maze.shape[1] - 1
 
         if action == 0:  # 上
@@ -44,7 +45,7 @@ class MazeEnv(gym.Env):
         elif action == 3:  # 右
             next_state[1] = min(self.state[1] + 1, max_col)
 
-        if self.maze[next_state[0], next_state[1]] != 1:  # 如果不是牆壁，才移動
+        if self.maze[next_state[0], next_state[1]] != 1:
             self.state = next_state
 
         terminated = np.array_equal(self.state, self.goal_pos)
